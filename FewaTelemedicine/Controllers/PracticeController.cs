@@ -668,5 +668,31 @@ namespace FewaTelemedicine.Controllers
             }
 
         }
+        [AllowAnonymous]
+        public IActionResult GetPracticeAndProvider(string practice, string provider)
+        {
+            try
+            {
+                List<Provider> getProvider = FewaDbContext.providers.Where(a => a.practice == practice.ToLower().Trim() && a.userName == provider.ToLower().Trim()).ToList();
+                if (getProvider.Count > 0)
+                {
+                    var result = new
+                    {
+                        User = getProvider,
+                    };
+                    return Ok(result);
+
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+
+        }
     }
 }
